@@ -1,4 +1,3 @@
-import React from "react";
 import {
   View,
   Text,
@@ -9,6 +8,7 @@ import {
 } from "react-native";
 import { Separator } from "react-native-btr";
 import { MaterialCommunityIcons as Icon } from "@expo/vector-icons";
+import { useEffect, useState } from 'react';
 
 type Component = {
   title: string;
@@ -28,6 +28,30 @@ const COMPONENTS = [
 ];
 
 const Home = ({ navigation }: any) => {
+
+  const [data, setData] = useState();
+
+  async function getLightPRicesApi() {
+    try {
+
+      const response = await fetch("https://api.preciodelaluz.org/v1/prices/all?zone=PCB", {
+        method: 'GET',
+        mode: 'cors',
+        credentials: "include",
+        redirect: 'follow'
+      })
+      const responseParsed = await response.text();
+      // @ts-ignore
+      setData(responseParsed);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    getLightPRicesApi();
+  }, [])
+
   const renderItem = ({ item }: { item: Component }) => (
     <TouchableHighlight onPress={() => navigation.navigate(item.title)}>
       <View style={styles.itemContainer}>
@@ -43,6 +67,7 @@ const Home = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <Text>Data</Text>
       <FlatList
         data={COMPONENTS}
         renderItem={renderItem}
