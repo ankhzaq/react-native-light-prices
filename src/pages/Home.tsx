@@ -27,56 +27,16 @@ const COMPONENTS = [
   { title: "Tag", icon: "tag" },
 ];
 
-const Home = ({ navigation }: any) => {
+const MIN_HOUR = 0;
+const MAX_HOUR = 23;
 
-  const [data, setData] = useState();
+const getKeyHour = (hour: number) => {
+  const nextHour = hour + 1;
+  const fromHour: string = hour < 10 ? `0${hour}` : hour.toString();
+  const toHour: string = nextHour < 10 ? `0${nextHour}` : nextHour.toString();
+  return `${fromHour}h  -  ${toHour}h`;
+}
 
-  async function getLightPRicesApi() {
-    try {
-
-      const response = await fetch("https://api.preciodelaluz.org/v1/prices/all?zone=PCB", {
-        method: 'GET',
-        mode: 'cors',
-        credentials: "include",
-        redirect: 'follow'
-      })
-      const responseParsed = await response.text();
-      // @ts-ignore
-      setData(responseParsed);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
-  useEffect(() => {
-    getLightPRicesApi();
-  }, [])
-
-  const renderItem = ({ item }: { item: Component }) => (
-    <TouchableHighlight onPress={() => navigation.navigate(item.title)}>
-      <View style={styles.itemContainer}>
-        <Icon name={item.icon} style={styles.iconLeft} />
-        <Text style={styles.title}>{item.title}</Text>
-        <Icon name="chevron-right" style={styles.iconRight} />
-      </View>
-    </TouchableHighlight>
-  );
-
-  const keyExtractor = (item: Component) => item.title;
-
-  return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-      <Text>Data</Text>
-      <FlatList
-        data={COMPONENTS}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        ItemSeparatorComponent={() => <Separator />}
-      />
-    </View>
-  );
-};
 
 const styles = StyleSheet.create({
   container: {
@@ -102,8 +62,72 @@ const styles = StyleSheet.create({
   },
 });
 
-Home.navigationOptions = {
-  title: "Components",
-};
+function Home({ navigation }: any) {
 
+  const [data, setData] = useState(null);
+
+  console.log('data: ', data);
+
+  // function to get data
+  async function getLightPRicesApi() {
+    try {
+      const response = await fetch("https://api.preciodelaluz.org/v1/prices/all?zone=PCB", {
+        method: 'GET',
+        mode: 'cors',
+        credentials: "include",
+        redirect: 'follow'
+      })
+      const responseParsed = await response.json();
+      setData(responseParsed);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  // useEffect to make the calls
+  useEffect(() => {
+    getLightPRicesApi();
+  }, [])
+
+  const renderItem = ({ item }: { item: Component }) => (
+    <TouchableHighlight onPress={() => navigation.navigate(item.title)}>
+      <View style={styles.itemContainer}>
+        <Icon style={styles.iconLeft} />
+        <Text style={styles.title}>{item.title}</Text>
+        <Icon name="chevron-right" style={styles.iconRight} />
+      </View>
+    </TouchableHighlight>
+  );
+
+  const keyExtractor = (item: Component) => item.title;
+
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      {data && (
+        <table>
+          <tr>
+            <th>hour</th>
+            <th>price (€/Mwh)</th>
+          </tr>
+          {/*// @ts-ignore */}
+          {Object.values(data).map(({ hour, price }: LighPriceInfo) => {
+            return (
+              <tr>
+                <td>{hour}</td>
+                <td>{price}</td>
+              </tr>
+            );
+          })}
+        </table>
+      )}
+      {/*<FlatList
+        data={COMPONENTS}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        ItemSeparatorComponent={() => <Separator />}
+      />*/}
+    </View>
+  );
+}
 export default Home;

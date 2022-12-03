@@ -2,7 +2,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import Home from "../Components/Home";
+import Home from "../pages/Home";
 import BottomSheet from "../Components/BottomSheet";
 import CheckBox from "../Components/CheckBox";
 import CollapsibleCard from "../Components/CollapsibleCard";
