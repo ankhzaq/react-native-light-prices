@@ -38,7 +38,7 @@ const getKeyHour = (hour: number) => {
 }
 
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
     flex: 1,
   },
@@ -51,6 +51,17 @@ const styles = StyleSheet.create({
   iconLeft: {
     fontSize: 24,
   },
+  rowCheap: {
+    backgroundColor: '#93faa5',
+  },
+  rowExpensive: {
+    backgroundColor: '#f1a9a0',
+  },
+  table: {
+    backgroundColor: 'white',
+    borderSpacing: '5px',
+    textAlign: 'center',
+  },
   title: {
     flex: 1,
     paddingHorizontal: 20,
@@ -60,7 +71,7 @@ const styles = StyleSheet.create({
     color: "#ccc",
     fontSize: 20,
   },
-});
+};
 
 function Home({ navigation }: any) {
 
@@ -105,20 +116,24 @@ function Home({ navigation }: any) {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       {data && (
-        <table>
-          <tr>
-            <th>hour</th>
-            <th>price (€/Mwh)</th>
-          </tr>
-          {/*// @ts-ignore */}
-          {Object.values(data).map(({ hour, price }: LighPriceInfo) => {
-            return (
-              <tr>
-                <td>{hour}</td>
-                <td>{price}</td>
-              </tr>
-            );
-          })}
+        <table style={styles.table}>
+          <tbody>
+            <tr>
+              <th>hour</th>
+              <th>price (€/Mwh)</th>
+            </tr>
+            {/*// @ts-ignore */}
+            {Object.values(data).map((lightPrice: LighPriceInfo) => {
+              const { hour, price } = lightPrice;
+              const styleRow = lightPrice['is-cheap'] ? styles.rowCheap : (lightPrice['is-under-avg'] ? styles.rowExpensive : {});
+              return (
+                <tr key={`row-${hour}`} style={styleRow}>
+                  <td>{hour}</td>
+                  <td>{price}</td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       )}
       {/*<FlatList
