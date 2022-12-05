@@ -30,10 +30,8 @@ const COMPONENTS = [
 const MIN_HOUR = 0;
 const MAX_HOUR = 23;
 
-const getKeyHour = (hour: number) => {
-  const nextHour = hour + 1;
-  const fromHour: string = hour < 10 ? `0${hour}` : hour.toString();
-  const toHour: string = nextHour < 10 ? `0${nextHour}` : nextHour.toString();
+const getKeyHourRange = (hourRange: string) => {
+  const [fromHour, toHour] = hourRange.split('-');
   return `${fromHour}h  -  ${toHour}h`;
 }
 
@@ -77,8 +75,6 @@ function Home({ navigation }: any) {
 
   const [data, setData] = useState(null);
 
-  console.log('data: ', data);
-
   // function to get data
   async function getLightPRicesApi() {
     try {
@@ -116,25 +112,23 @@ function Home({ navigation }: any) {
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       {data && (
-        <table style={styles.table}>
-          <tbody>
-            <tr>
-              <th>hour</th>
-              <th>price (€/Mwh)</th>
-            </tr>
+        <View style={styles.table}>
+            <View>
+              <Text>hour</Text>
+              <Text>hour</Text>
+            </View>
             {/*// @ts-ignore */}
             {Object.values(data).map((lightPrice: LighPriceInfo) => {
               const { hour, price } = lightPrice;
               const styleRow = lightPrice['is-cheap'] ? styles.rowCheap : (lightPrice['is-under-avg'] ? styles.rowExpensive : {});
               return (
-                <tr key={`row-${hour}`} style={styleRow}>
-                  <td>{hour}</td>
-                  <td>{price}</td>
-                </tr>
+                <View key={`row-${hour}`} style={styleRow}>
+                  <Text>{getKeyHourRange(hour)}</Text>
+                  <Text>{price}</Text>
+                </View>
               );
             })}
-          </tbody>
-        </table>
+        </View>
       )}
       {/*<FlatList
         data={COMPONENTS}
