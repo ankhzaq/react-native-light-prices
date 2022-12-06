@@ -49,6 +49,14 @@ const styles = {
   iconLeft: {
     fontSize: 24,
   },
+  rowColumn: {
+    width: 'fit-content',
+  },
+  rowView: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: 'space-around',
+  },
   rowCheap: {
     backgroundColor: '#93faa5',
   },
@@ -113,18 +121,18 @@ function Home({ navigation }: any) {
       <StatusBar barStyle="dark-content" backgroundColor="#fff" />
       {data && (
         <View style={styles.table}>
-            <View>
-              <Text>hour</Text>
-              <Text>hour</Text>
+            <View style={styles.rowView}>
+              <Text style={styles.rowColumn}>hour</Text>
+              <Text style={styles.rowColumn}>Price</Text>
             </View>
             {/*// @ts-ignore */}
             {Object.values(data).map((lightPrice: LighPriceInfo) => {
               const { hour, price } = lightPrice;
               const styleRow = lightPrice['is-cheap'] ? styles.rowCheap : (lightPrice['is-under-avg'] ? styles.rowExpensive : {});
               return (
-                <View key={`row-${hour}`} style={styleRow}>
-                  <Text>{getKeyHourRange(hour)}</Text>
-                  <Text>{price}</Text>
+                <View key={`row-${hour}`} style={{...styleRow, ...styles.rowView}}>
+                  <Text style={styles.rowColumn}>{getKeyHourRange(hour)}</Text>
+                  <Text style={styles.rowColumn}>{price}</Text>
                 </View>
               );
             })}
