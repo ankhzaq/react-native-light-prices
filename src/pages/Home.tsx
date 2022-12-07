@@ -27,8 +27,7 @@ const COMPONENTS = [
   { title: "Tag", icon: "tag" },
 ];
 
-const MIN_HOUR = 0;
-const MAX_HOUR = 23;
+const WIDTH_CELL_DATA = '75px';
 
 const getKeyHourRange = (hourRange: string) => {
   const [fromHour, toHour] = hourRange.split('-');
@@ -49,8 +48,8 @@ const styles = {
   iconLeft: {
     fontSize: 24,
   },
-  rowColumn: {
-    width: 'fit-content',
+  rowWidth: {
+    width: WIDTH_CELL_DATA,
   },
   rowView: {
     display: "flex",
@@ -122,8 +121,8 @@ function Home({ navigation }: any) {
       {data && (
         <View style={styles.table}>
             <View style={styles.rowView}>
-              <Text style={styles.rowColumn}>hour</Text>
-              <Text style={styles.rowColumn}>Price</Text>
+              <Text style={styles.rowWidth}>hour</Text>
+              <Text style={styles.rowWidth}>Price</Text>
             </View>
             {/*// @ts-ignore */}
             {Object.values(data).map((lightPrice: LighPriceInfo) => {
@@ -131,8 +130,8 @@ function Home({ navigation }: any) {
               const styleRow = lightPrice['is-cheap'] ? styles.rowCheap : (lightPrice['is-under-avg'] ? styles.rowExpensive : {});
               return (
                 <View key={`row-${hour}`} style={{...styleRow, ...styles.rowView}}>
-                  <Text style={styles.rowColumn}>{getKeyHourRange(hour)}</Text>
-                  <Text style={styles.rowColumn}>{price}</Text>
+                  <Text style={styles.rowWidth}>{getKeyHourRange(hour)}</Text>
+                  <Text style={styles.rowWidth}>{price}</Text>
                 </View>
               );
             })}
