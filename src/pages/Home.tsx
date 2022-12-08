@@ -48,19 +48,25 @@ const styles = {
   iconLeft: {
     fontSize: 24,
   },
-  rowWidth: {
+  rowCell: {
+    paddingBottom: '5px',
     width: WIDTH_CELL_DATA,
-  },
-  rowView: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: 'space-around',
   },
   rowCheap: {
     backgroundColor: '#93faa5',
   },
   rowExpensive: {
     backgroundColor: '#f1a9a0',
+  },
+  rowHeader: {
+    fontWeight: '800',
+    padding: '10px',
+    textTransform: 'uppercase',
+  },
+  rowView: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: 'space-around',
   },
   table: {
     backgroundColor: 'white',
@@ -121,8 +127,8 @@ function Home({ navigation }: any) {
       {data && (
         <View style={styles.table}>
             <View style={styles.rowView}>
-              <Text style={styles.rowWidth}>hour</Text>
-              <Text style={styles.rowWidth}>Price</Text>
+              <Text style={{ ...styles.rowCell, ...styles.rowHeader}}>hour</Text>
+              <Text style={{...styles.rowCell, ...styles.rowHeader}}>Price</Text>
             </View>
             {/*// @ts-ignore */}
             {Object.values(data).map((lightPrice: LighPriceInfo) => {
@@ -130,8 +136,8 @@ function Home({ navigation }: any) {
               const styleRow = lightPrice['is-cheap'] ? styles.rowCheap : (lightPrice['is-under-avg'] ? styles.rowExpensive : {});
               return (
                 <View key={`row-${hour}`} style={{...styleRow, ...styles.rowView}}>
-                  <Text style={styles.rowWidth}>{getKeyHourRange(hour)}</Text>
-                  <Text style={styles.rowWidth}>{price}</Text>
+                  <Text style={styles.rowCell}>{getKeyHourRange(hour)}</Text>
+                  <Text style={styles.rowCell}>{price}</Text>
                 </View>
               );
             })}
