@@ -64,6 +64,7 @@ const styles = {
     textTransform: 'uppercase',
   },
   rowView: {
+    borderBottom: '1px solid rgb(216 216 216)',
     display: "flex",
     flexDirection: "row",
     justifyContent: 'space-around',
