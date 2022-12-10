@@ -1,31 +1,9 @@
 import {
   View,
   Text,
-  StyleSheet,
-  StatusBar,
-  FlatList,
-  TouchableHighlight,
 } from "react-native";
-import { Separator } from "react-native-btr";
-import { MaterialCommunityIcons as Icon } from "@expo/vector-icons";
 import { useEffect, useState } from 'react';
-
-type Component = {
-  title: string;
-  icon: string;
-};
-
-const COMPONENTS = [
-  { title: "BottomSheet", icon: "border-bottom" },
-  { title: "CheckBox", icon: "checkbox-marked" },
-  { title: "CollapsibleCard", icon: "border-horizontal" },
-  { title: "ColorPicker", icon: "palette" },
-  { title: "IconPicker", icon: "select-all" },
-  { title: "ModalInput", icon: "relative-scale" },
-  { title: "RadioGroup", icon: "checkbox-blank-circle-outline" },
-  { title: "Separator", icon: "minus" },
-  { title: "Tag", icon: "tag" },
-];
+import translations from '../localizations/es.json';
 
 const WIDTH_CELL_DATA = '75px';
 
@@ -34,6 +12,15 @@ const getKeyHourRange = (hourRange: string) => {
   return `${fromHour}h  -  ${toHour}h`;
 }
 
+const getCurrentHourInfo = (data: any) => {
+  if (!data) return;
+  let currentHour: any = new Date().getHours();
+  let nextHour: any = currentHour + 1;
+  currentHour = currentHour < 10 ? `0${currentHour}` : currentHour.toString();
+  nextHour = nextHour < 10 ? `0${nextHour}` : nextHour.toString();
+  const key = `${currentHour}-${nextHour}`;
+  return data[key]
+}
 
 const styles = {
   container: {
@@ -108,28 +95,21 @@ function Home({ navigation }: any) {
   // useEffect to make the calls
   useEffect(() => {
     getLightPRicesApi();
-  }, [])
+  }, []);
 
-  const renderItem = ({ item }: { item: Component }) => (
-    <TouchableHighlight onPress={() => navigation.navigate(item.title)}>
-      <View style={styles.itemContainer}>
-        <Icon style={styles.iconLeft} />
-        <Text style={styles.title}>{item.title}</Text>
-        <Icon name="chevron-right" style={styles.iconRight} />
-      </View>
-    </TouchableHighlight>
-  );
-
-  const keyExtractor = (item: Component) => item.title;
+  const currentHourInfo: LighPriceInfo | undefined = getCurrentHourInfo(data);
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+      <View style={styles.rowView}>
+        <Text style={{ ...styles.rowCell, ...styles.rowHeader, width: 'auto'}}>{translations.currentHour}</Text>
+        <Text style={{ ...styles.rowCell, ...styles.rowHeader, width: 'auto'}}>{currentHourInfo && currentHourInfo.price}</Text>
+      </View>
       {data && (
         <View style={styles.table}>
             <View style={styles.rowView}>
-              <Text style={{ ...styles.rowCell, ...styles.rowHeader}}>hour</Text>
-              <Text style={{...styles.rowCell, ...styles.rowHeader}}>Price</Text>
+              <Text style={{ ...styles.rowCell, ...styles.rowHeader}}>{translations.hour}</Text>
+              <Text style={{...styles.rowCell, ...styles.rowHeader}}>{translations.price}</Text>
             </View>
             {/*// @ts-ignore */}
             {Object.values(data).map((lightPrice: LighPriceInfo) => {
@@ -144,12 +124,6 @@ function Home({ navigation }: any) {
             })}
         </View>
       )}
-      {/*<FlatList
-        data={COMPONENTS}
-        renderItem={renderItem}
-        keyExtractor={keyExtractor}
-        ItemSeparatorComponent={() => <Separator />}
-      />*/}
     </View>
   );
 }

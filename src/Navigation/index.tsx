@@ -13,13 +13,15 @@ import RadioGroup from "../Components/RadioGroup";
 import Separator from "../Components/Separator";
 import Tag from "../Components/Tag";
 
+import translations from '../localizations/es.json';
+
 const Stack = createStackNavigator();
 
 export default function AppNavigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
+        <Stack.Screen name={translations.titleHome} component={Home} />
         <Stack.Screen name="BottomSheet" component={BottomSheet} />
         <Stack.Screen name="CheckBox" component={CheckBox} />
         <Stack.Screen name="CollapsibleCard" component={CollapsibleCard} />
