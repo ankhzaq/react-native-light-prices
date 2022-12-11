@@ -5,7 +5,7 @@ import {
 import { useEffect, useState } from 'react';
 import translations from '../localizations/es.json';
 
-const WIDTH_CELL_DATA = '75px';
+const WIDTH_CELL_DATA = '132px';
 
 const getKeyHourRange = (hourRange: string) => {
   const [fromHour, toHour] = hourRange.split('-');
@@ -20,6 +20,11 @@ const getCurrentHourInfo = (data: any) => {
   nextHour = nextHour < 10 ? `0${nextHour}` : nextHour.toString();
   const key = `${currentHour}-${nextHour}`;
   return data[key]
+}
+
+const getUnits = (data: any) => {
+  if (!data) return "";
+  return data["00-01"].units;
 }
 
 const styles = {
@@ -109,7 +114,7 @@ function Home({ navigation }: any) {
         <View style={styles.table}>
             <View style={styles.rowView}>
               <Text style={{ ...styles.rowCell, ...styles.rowHeader}}>{translations.hour}</Text>
-              <Text style={{...styles.rowCell, ...styles.rowHeader}}>{translations.price}</Text>
+              <Text style={{...styles.rowCell, ...styles.rowHeader}}>{`${translations.price} ${getUnits(data)}`}</Text>
             </View>
             {/*// @ts-ignore */}
             {Object.values(data).map((lightPrice: LighPriceInfo) => {
