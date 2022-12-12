@@ -47,6 +47,9 @@ const styles = {
   rowCheap: {
     backgroundColor: '#93faa5',
   },
+  rowCheapAVG: {
+    backgroundColor: '#fe9f0063',
+  },
   rowExpensive: {
     backgroundColor: '#f1a9a0',
   },
@@ -119,7 +122,8 @@ function Home({ navigation }: any) {
             {/*// @ts-ignore */}
             {Object.values(data).map((lightPrice: LighPriceInfo) => {
               const { hour, price } = lightPrice;
-              const styleRow = lightPrice['is-cheap'] ? styles.rowCheap : (lightPrice['is-under-avg'] ? styles.rowExpensive : {});
+              // is-under-avg
+              const styleRow = lightPrice['is-cheap'] ? styles.rowCheap : (lightPrice['is-under-avg'] ? styles.rowExpensive : styles.rowCheapAVG);
               return (
                 <View key={`row-${hour}`} style={{...styleRow, ...styles.rowView}}>
                   <Text style={styles.rowCell}>{getKeyHourRange(hour)}</Text>
