@@ -41,7 +41,7 @@ const styles = {
     fontSize: 24,
   },
   rowCell: {
-    paddingBottom: '5px',
+    padding: '6px',
     width: WIDTH_CELL_DATA,
   },
   rowCheap: {
