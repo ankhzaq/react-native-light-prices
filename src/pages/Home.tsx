@@ -55,7 +55,7 @@ const styles = {
   },
   rowHeader: {
     fontWeight: '800',
-    padding: '10px',
+    padding: '10pt',
     textTransform: 'uppercase',
   },
   rowView: {
