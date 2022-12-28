@@ -31,14 +31,14 @@ export default StyleSheet.create({
     textTransform: 'uppercase',
   },
   rowView: {
-    borderBottom: '1px solid rgb(216 216 216)',
+    // borderBottom: '1px solid rgb(216 216 216)',
     display: "flex",
     flexDirection: "row",
     justifyContent: 'space-around',
   },
   table: {
     backgroundColor: 'white',
-    borderSpacing: '5px',
+    // borderSpacing: '5px',
     textAlign: 'center',
   },
   title: {

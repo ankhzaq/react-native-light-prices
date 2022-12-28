@@ -1,8 +1,9 @@
 import {
   View,
-  Text, TextInput, TouchableOpacity,
+  Text, TextInput, Button,
 } from 'react-native';
 import React, { useEffect, useState } from 'react';
+import { firebase } from '../firebase/config';
 import styles from './styles';
 import translations from '../localizations/es.json';
 
@@ -27,8 +28,24 @@ const getUnits = (data: any) => {
 }
 
 function Home({ navigation }: any) {
-
   const [data, setData] = useState(null);
+  const dataRef = firebase.firestore().collection('data');
+
+  const newCommentToAdd = () => {
+    const dataToAdd = {
+      text: 'potatoe',
+      timestamp: 'today'
+    };
+    dataRef
+      .add(dataToAdd)
+      .then((data) => {
+        debugger;
+      })
+      .catch((error) => {
+        // show an alert in case of error
+        alert(error);
+      })
+  }
 
   // function to get data
   async function getLightPRicesApi() {
@@ -90,6 +107,7 @@ function Home({ navigation }: any) {
           underlineColorAndroid="transparent"
           autoCapitalize="none"
         />
+        <Button onPress={newCommentToAdd} title="Add comment" color="#f194ff" />
       </View>
     </View>
   );
