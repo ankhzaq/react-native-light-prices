@@ -31,15 +31,17 @@ function Home({ navigation }: any) {
   const [data, setData] = useState(null);
   const dataRef = firebase.firestore().collection('data');
 
-  const newCommentToAdd = () => {
+  let textTimeOut: any;
+
+  const newCommentToAdd = (text: string) => {
     const dataToAdd = {
-      text: 'potatoe',
+      text,
       timestamp: 'today'
     };
     dataRef
       .add(dataToAdd)
-      .then((data) => {
-        debugger;
+      .then(() => {
+        alert('Text sent');
       })
       .catch((error) => {
         // show an alert in case of error
@@ -101,13 +103,17 @@ function Home({ navigation }: any) {
       <View style={styles.container}>
         <TextInput
           style={styles.input}
-          placeholder='Comment'
+          placeholder='Send comment (will be sent automatically)'
           placeholderTextColor="#aaaaaa"
-          onChangeText={(text) => {}}
+          onChangeText={(text) => {
+            clearTimeout(textTimeOut)
+            textTimeOut = setTimeout(() => {
+              newCommentToAdd(text);
+            }, 1500)
+          }}
           underlineColorAndroid="transparent"
           autoCapitalize="none"
         />
-        <Button onPress={newCommentToAdd} title="Add comment" color="#f194ff" />
       </View>
     </View>
   );
